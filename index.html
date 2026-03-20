@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-First Organization: Strategy & Maturity Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+        
+        body {
+            font-family: 'Courier Prime', monospace;
+            background-color: #fafaf9; /* Stone 50 */
+            color: #1c1917; /* Stone 900 */
+        }
+        
+        h1, h2, h3, .serif {
+            font-family: 'Courier Prime', monospace;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .interactive-card {
+            transition: all 0.3s ease;
+        }
+        .interactive-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Custom Scrollbar for inner content if needed */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e; 
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Chosen Palette: Warm Stone & Earth Tones (Stone/Teal/Rust) for calm harmony -->
+    <!-- Application Structure Plan: 
+         1. Hero/Intro: Define the core dichotomy (Enabled vs First).
+         2. The 4 Pillars (Tabs): Interactive deep dive into the 4 tests (Dependency, Data, Culture, Talent).
+         3. The Flywheel Lab (Simulation): Visualizing the Data Flywheel vs Data Silo concept.
+         4. Maturity Assessment (Quiz): Interactive 10-question quiz derived from source.
+         5. Strategic Impact (Chart): Comparison of linear vs exponential value growth.
+         Rationale: Logic flows from Definition -> Components -> Mechanism -> Self-Assessment -> Outcome.
+    -->
+    <!-- Visualization & Content Choices:
+         1. Radar Chart: To visualize the 4-axis maturity model (Dependency, Data, Decision, Talent). Chart.js used.
+         2. Comparison Cards: Side-by-side text blocks to contrast Enabled vs First.
+         3. Data Flywheel Visual: HTML/CSS Grid layout with unicode arrows to show the cycle. No SVG.
+         4. Line Chart: To show "Value over Time" simulation. Chart.js used.
+         5. Interactive Quiz: JS-driven DOM manipulation.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+
+    <!-- Navigation -->
+    <nav class="bg-stone-900 text-stone-100 shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="font-bold text-xl tracking-tight serif">AI-First Explorer</div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium">
+                    <button onclick="navTo('section-intro')" class="hover:text-teal-400 transition-colors">Core Concepts</button>
+                    <button onclick="navTo('section-pillars')" class="hover:text-teal-400 transition-colors">The 4 Tests</button>
+                    <button onclick="navTo('section-flywheel')" class="hover:text-teal-400 transition-colors">Data Flywheel</button>
+                    <button onclick="navTo('section-quiz')" class="hover:text-teal-400 transition-colors">Assessment</button>
+                </div>
+                <!-- Mobile Menu Button (Functional via JS) -->
+                <button id="mobile-menu-btn" class="md:hidden text-stone-100 focus:outline-none">
+                    &#9776;
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-stone-800 pb-4 px-4">
+            <button onclick="navTo('section-intro')" class="block py-2 w-full text-left hover:text-teal-400">Core Concepts</button>
+            <button onclick="navTo('section-pillars')" class="block py-2 w-full text-left hover:text-teal-400">The 4 Tests</button>
+            <button onclick="navTo('section-flywheel')" class="block py-2 w-full text-left hover:text-teal-400">Data Flywheel</button>
+            <button onclick="navTo('section-quiz')" class="block py-2 w-full text-left hover:text-teal-400">Assessment</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full space-y-16">
+
+        <!-- SECTION 1: INTRO & CONCEPT -->
+        <section id="section-intro" class="fade-in">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-stone-800 mb-6 leading-tight">Beyond "Using" AI: <br><span class="text-teal-700">Becoming AI-First</span></h1>
+                <p class="text-lg text-stone-600 leading-relaxed">
+                    Most organizations are <strong>AI-Enabled</strong>—using tools to optimize human work. An <strong>AI-First</strong> organization is different: the business model relies on AI as the primary engine of value. Use this interactive guide to understand the DNA of an AI-First company.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <!-- Interactive Comparison -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                    <h2 class="text-2xl font-bold mb-4 text-stone-800 serif">The Distinction</h2>
+                    <p class="text-sm text-stone-500 mb-6">Click the buttons to contrast the operating models.</p>
+                    
+                    <div class="flex space-x-4 mb-6">
+                        <button id="btn-enabled" class="flex-1 py-2 px-4 rounded-lg bg-stone-200 text-stone-600 font-semibold hover:bg-stone-300 transition-colors focus:ring-2 focus:ring-stone-400">AI-Enabled</button>
+                        <button id="btn-first" class="flex-1 py-2 px-4 rounded-lg bg-teal-600 text-white font-semibold hover:bg-teal-700 transition-colors focus:ring-2 focus:ring-teal-500 shadow-md">AI-First</button>
+                    </div>
+
+                    <div id="comparison-content" class="space-y-4 min-h-[200px]">
+                        <!-- Content injected via JS -->
+                    </div>
+                </div>
+
+                <!-- Visualizing Maturity Dimensions -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200">
+                    <h2 class="text-2xl font-bold mb-2 text-stone-800 serif">Maturity Radar</h2>
+                    <p class="text-sm text-stone-500 mb-4">Comparing the organizational footprint.</p>
+                    <div class="chart-container">
+                        <canvas id="maturityRadarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE 4 PILLARS (The Tests) -->
+        <section id="section-pillars" class="fade-in scroll-mt-20">
+            <div class="mb-8 border-b border-stone-200 pb-4">
+                <h2 class="text-3xl font-bold text-stone-800 serif">The 4 Litmus Tests</h2>
+                <p class="mt-2 text-stone-600">Determine your organization's maturity by applying these four structural tests. Click each pillar to reveal the diagnostic criteria.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-8">
+                <!-- Pillar Nav -->
+                <button onclick="selectPillar(0)" id="pillar-btn-0" class="pillar-btn p-4 text-left rounded-lg bg-teal-50 border-l-4 border-teal-600 transition-all">
+                    <div class="font-bold text-teal-800">1. Strategic Dependency</div>
+                    <div class="text-xs text-teal-600 mt-1">The "Power Outage" Test</div>
+                </button>
+                <button onclick="selectPillar(1)" id="pillar-btn-1" class="pillar-btn p-4 text-left rounded-lg bg-white border-l-4 border-transparent hover:bg-stone-50 transition-all">
+                    <div class="font-bold text-stone-700">2. Infrastructure</div>
+                    <div class="text-xs text-stone-500 mt-1">The "Data Hierarchy" Test</div>
+                </button>
+                <button onclick="selectPillar(2)" id="pillar-btn-2" class="pillar-btn p-4 text-left rounded-lg bg-white border-l-4 border-transparent hover:bg-stone-50 transition-all">
+                    <div class="font-bold text-stone-700">3. Decision Making</div>
+                    <div class="text-xs text-stone-500 mt-1">The "HiPPO" Test</div>
+                </button>
+                <button onclick="selectPillar(3)" id="pillar-btn-3" class="pillar-btn p-4 text-left rounded-lg bg-white border-l-4 border-transparent hover:bg-stone-50 transition-all">
+                    <div class="font-bold text-stone-700">4. Talent & Structure</div>
+                    <div class="text-xs text-stone-500 mt-1">The "Org Chart" Test</div>
+                </button>
+            </div>
+
+            <!-- Pillar Content Display -->
+            <div id="pillar-content" class="bg-white rounded-xl shadow-lg border border-stone-100 p-8 min-h-[300px] flex flex-col justify-center">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: DATA FLYWHEEL LAB -->
+        <section id="section-flywheel" class="fade-in scroll-mt-20">
+            <div class="bg-stone-800 rounded-2xl p-8 md:p-12 text-stone-100">
+                <div class="max-w-3xl mb-10">
+                    <h2 class="text-3xl font-bold text-white mb-4 serif">The Engine: Data Flywheel vs. Silo</h2>
+                    <p class="text-stone-300 text-lg">
+                        The defining technical characteristic of an AI-First company is the <strong>Data Flywheel</strong>. Unlike dashboards (which just display data), a flywheel uses product interaction to create data that <em>trains</em> the model.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    
+                    <!-- Visualization: The Flywheel -->
+                    <div class="relative bg-stone-900 rounded-xl p-6 border border-stone-700 shadow-2xl">
+                        <div class="absolute top-0 left-0 bg-teal-600 text-white text-xs font-bold px-3 py-1 rounded-br-lg rounded-tl-lg">AI-FIRST ARCHITECTURE</div>
+                        
+                        <!-- Grid Layout for Flywheel -->
+                        <div class="grid grid-cols-2 gap-6 mt-6 relative">
+                            <!-- Step 1 -->
+                            <div class="flex flex-col items-center text-center p-4 bg-stone-800 rounded-lg border border-stone-600">
+                                <span class="text-3xl mb-2">&#128101;</span> <!-- User -->
+                                <h4 class="font-bold text-teal-400">User Interaction</h4>
+                                <p class="text-xs text-stone-400">Users engage with the product (e.g., clicking, skipping).</p>
+                            </div>
+                            <!-- Arrow Right -->
+                            <div class="absolute top-1/4 left-1/2 transform -translate-x-1/2 text-stone-500 text-2xl font-bold hidden md:block">&rarr;</div>
+
+                            <!-- Step 2 -->
+                            <div class="flex flex-col items-center text-center p-4 bg-stone-800 rounded-lg border border-stone-600">
+                                <span class="text-3xl mb-2">&#128190;</span> <!-- Disk -->
+                                <h4 class="font-bold text-teal-400">Labeled Data</h4>
+                                <p class="text-xs text-stone-400">Interactions are captured as training labels.</p>
+                            </div>
+
+                            <!-- Arrow Down (Right side) -->
+                            <div class="absolute right-[-10px] top-1/2 transform -translate-y-1/2 text-stone-500 text-2xl font-bold hidden md:block">&darr;</div>
+
+                            <!-- Step 4 (Bottom Left - looped back) -->
+                            <div class="flex flex-col items-center text-center p-4 bg-stone-800 rounded-lg border border-stone-600 order-last lg:order-none">
+                                <span class="text-3xl mb-2">&#128640;</span> <!-- Rocket -->
+                                <h4 class="font-bold text-teal-400">Better Product</h4>
+                                <p class="text-xs text-stone-400">Attracts more users, restarting the loop.</p>
+                            </div>
+
+                            <!-- Step 3 -->
+                            <div class="flex flex-col items-center text-center p-4 bg-stone-800 rounded-lg border border-stone-600">
+                                <span class="text-3xl mb-2">&#129504;</span> <!-- Brain -->
+                                <h4 class="font-bold text-teal-400">Model Training</h4>
+                                <p class="text-xs text-stone-400">The "Single Source of Truth" updates the AI.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Cycle Arrows for Mobile/General context -->
+                        <div class="text-center mt-4 text-stone-500 text-sm italic">
+                            &#8635; The cycle reinforces itself automatically.
+                        </div>
+                    </div>
+
+                    <!-- Explainer / Simulation Controls -->
+                    <div class="space-y-6">
+                        <div class="bg-stone-700/50 p-4 rounded-lg border-l-4 border-amber-500">
+                            <h4 class="font-bold text-amber-400 mb-1">Contrast: The AI-Enabled Way</h4>
+                            <p class="text-sm text-stone-300">
+                                In an AI-Enabled org, data goes to a dashboard. Humans read it, make decisions, and manually update the product. The loop is slow and broken by human bottlenecks.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Simulated Value Growth</h3>
+                            <p class="text-sm text-stone-400 mb-4">See how the Flywheel effect compounds value over time compared to linear manual optimization.</p>
+                            <div class="chart-container" style="height: 250px;">
+                                <canvas id="growthChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: ASSESSMENT QUIZ -->
+        <section id="section-quiz" class="fade-in scroll-mt-20">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-stone-800 serif">Maturity Assessment</h2>
+                    <p class="text-stone-600 mt-2">Test your understanding of the AI-First model based on the study guide. Can you identify the true indicators?</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg border border-stone-200 overflow-hidden">
+                    <!-- Quiz Header -->
+                    <div class="bg-stone-100 px-6 py-4 border-b border-stone-200 flex justify-between items-center">
+                        <span class="font-bold text-stone-700">Question <span id="quiz-q-num">1</span> of 10</span>
+                        <div class="w-1/3 bg-stone-300 rounded-full h-2.5">
+                            <div id="quiz-progress" class="bg-teal-600 h-2.5 rounded-full" style="width: 10%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Body -->
+                    <div class="p-8">
+                        <h3 id="quiz-question" class="text-xl font-semibold text-stone-800 mb-6 min-h-[3.5rem]">
+                            Loading Question...
+                        </h3>
+                        
+                        <div id="quiz-options" class="grid grid-cols-1 gap-4">
+                            <!-- Options injected via JS -->
+                        </div>
+
+                        <!-- Feedback Area -->
+                        <div id="quiz-feedback" class="hidden mt-6 p-4 rounded-lg bg-stone-50 border border-stone-200">
+                            <div id="feedback-icon" class="text-2xl mb-2"></div>
+                            <p id="feedback-text" class="text-stone-700 font-medium"></p>
+                            <p id="feedback-rationale" class="text-sm text-stone-500 mt-2"></p>
+                            <button id="next-btn" class="mt-4 px-6 py-2 bg-stone-800 text-white rounded-lg hover:bg-stone-700 transition-colors">Next Question &rarr;</button>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Results (Hidden initially) -->
+                    <div id="quiz-results" class="hidden p-12 text-center">
+                        <div class="text-6xl mb-4">&#127942;</div>
+                        <h3 class="text-3xl font-bold text-stone-800 mb-2">Assessment Complete</h3>
+                        <p class="text-lg text-stone-600 mb-6">You scored <span id="final-score" class="font-bold text-teal-600 text-2xl">0</span> / 10</p>
+                        <p id="result-message" class="text-stone-500 max-w-lg mx-auto mb-8"></p>
+                        <button onclick="restartQuiz()" class="px-6 py-3 bg-teal-600 text-white rounded-lg font-bold hover:bg-teal-700 transition shadow-lg">Retake Assessment</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-12 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="mb-4 font-serif text-lg text-stone-200">AI-First Organization Strategy Explorer</p>
+            <p class="text-sm">Generated based on the provided Maturity Assessment & Study Guide.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- DATA STORAGE ---
+        
+        // Comparison Data (Enabled vs First)
+        const comparisonData = {
+            enabled: {
+                role: "A tool to assist humans (Optimizer)",
+                data: "Stored for reports ('Store it, might need it')",
+                workflow: "Human → AI → Human decides",
+                mistakes: "Blamed on glitches, fixed manually",
+                color: "bg-stone-100 border-stone-300"
+            },
+            first: {
+                role: "A teammate/agent that acts autonomously (Core Engine)",
+                data: "Fed to models continuously ('Feed it, model needs it')",
+                workflow: "AI → Action → Human reviews exceptions",
+                mistakes: "Valuable training data to improve the model",
+                color: "bg-teal-50 border-teal-200"
+            }
+        };
+
+        // Pillar Content
+        const pillars = [
+            {
+                title: "Strategic Dependency",
+                subtitle: "The 'Power Outage' Test",
+                icon: "⚡",
+                content: "<strong>The Question:</strong> If your AI algorithms stopped working today, would the business merely slow down, or would it stop functioning?<br><br><strong>AI-Enabled:</strong> Efficiency drops (manual fallback).<br><strong>AI-First:</strong> The product ceases to exist (e.g., Waymo, TikTok).",
+                kpi: "Board KPI: Model Uptime / Availability"
+            },
+            {
+                title: "Infrastructure",
+                subtitle: "The 'Data Hierarchy' Test",
+                icon: "🏗️",
+                content: "<strong>The Question:</strong> Do you build products to harvest data, or just use data to support products?<br><br><strong>AI-Enabled:</strong> Data silos. Reports.<br><strong>AI-First:</strong> <em>Data Flywheels</em>. Single Source of Truth. Products are designed to label data automatically (e.g., ReCAPTCHA).",
+                kpi: "Board KPI: Data Quality & Freshness"
+            },
+            {
+                title: "Decision Making",
+                subtitle: "The 'HiPPO' Test",
+                icon: "🧠",
+                content: "<strong>The Question:</strong> When executive intuition conflicts with the model, who wins?<br><br><strong>AI-Enabled:</strong> The HiPPO (Highest Paid Person's Opinion).<br><strong>AI-First:</strong> The Model. Humans only handle 'Edge Cases' where the model lacks confidence.",
+                kpi: "Board KPI: Automation Rate %"
+            },
+            {
+                title: "Talent & Structure",
+                subtitle: "The 'Org Chart' Test",
+                icon: "👥",
+                content: "<strong>The Question:</strong> Where do data scientists sit?<br><br><strong>AI-Enabled:</strong> Siloed in IT or 'Innovation Labs'.<br><strong>AI-First:</strong> Embedded in product/ops teams. CTO/CIO has ML background.",
+                kpi: "Board KPI: Ratio of Builders to Managers"
+            }
+        ];
+
+        // Quiz Data (Derived from source)
+        const quizQuestions = [
+            {
+                q: "According to the 'Power Outage Test', what characterizes an AI-First organization if AI stops?",
+                options: [
+                    "Business continues manually, just slower.",
+                    "Customer support switches to phones.",
+                    "The core product/service effectively ceases to exist.",
+                    "Quarterly reports cannot be generated."
+                ],
+                correct: 2,
+                rationale: "In AI-First, the business model relies on AI as the engine. Without it, the product fails."
+            },
+            {
+                q: "What is a 'Data Flywheel'?",
+                options: [
+                    "Manual data cleaning system.",
+                    "Product design where usage automatically labels data to retrain models.",
+                    "A real-time executive dashboard.",
+                    "An archival storage solution."
+                ],
+                correct: 1,
+                rationale: "A flywheel uses product usage to generate better data, improving the model and attracting more users."
+            },
+            {
+                q: "What does the 'HiPPO test' assess?",
+                options: [
+                    "Salary budgets for data science.",
+                    "Physical location of the executive suite.",
+                    "Decision-making culture: Data vs. Executive Intuition.",
+                    "Speed of hiring."
+                ],
+                correct: 2,
+                rationale: "It tests if the org trusts the algorithm over the Highest Paid Person's Opinion."
+            },
+            {
+                q: "Where should AI talent sit in an AI-First company?",
+                options: [
+                    "Embedded in cross-functional product/ops teams.",
+                    "Siloed in an Innovation Lab.",
+                    "Outsourced to vendors.",
+                    "Reporting to IT helpdesk."
+                ],
+                correct: 0,
+                rationale: "Embedding talent ensures AI is built into the product strategy from day one."
+            },
+            {
+                q: "How does an AI-First org view algorithmic mistakes?",
+                options: [
+                    "System failures requiring permanent manual overrides.",
+                    "Valuable training data to feed back into the model.",
+                    "Reasons to abandon the project.",
+                    "Glitches to hide from leadership."
+                ],
+                correct: 1,
+                rationale: "Errors are signals used to refine the model's accuracy."
+            },
+            {
+                q: "Which is a characteristic of 'AI-Enabled' (not First)?",
+                options: [
+                    "AI determines pricing dynamically.",
+                    "Routine approvals are fully automated.",
+                    "Data silos exist; AI is used for reporting.",
+                    "CTO has ML background."
+                ],
+                correct: 2,
+                rationale: "AI-Enabled often layers AI on top of fragmented data for insights, not execution."
+            },
+            {
+                q: "What is the primary human role in AI-First workflows?",
+                options: [
+                    "Data entry.",
+                    "Making every decision with AI suggestions.",
+                    "Rebooting servers.",
+                    "Reviewing 'edge cases' and ethics governance."
+                ],
+                correct: 3,
+                rationale: "Humans move from 'doing' to 'managing' the AI, handling low-confidence scenarios."
+            },
+            {
+                q: "Which is a Board-level KPI for AI-First?",
+                options: [
+                    "Software licenses purchased.",
+                    "Data Quality or Model Freshness.",
+                    "Pages printed.",
+                    "Meeting duration."
+                ],
+                correct: 1,
+                rationale: "Since the business runs on models, data health is a critical asset."
+            },
+            {
+                q: "What does 'Single Source of Truth' imply?",
+                options: [
+                    "Centralized data lake all algorithms feed from.",
+                    "One manager approves changes.",
+                    "Single software vendor.",
+                    "Paper records."
+                ],
+                correct: 0,
+                rationale: "Centralization ensures consistency for all models."
+            },
+            {
+                q: "If you remove AI from an AI-Enabled company:",
+                options: [
+                    "Immediate collapse.",
+                    "Business continues, but efficiency drops.",
+                    "It becomes AI-First.",
+                    "No change."
+                ],
+                correct: 1,
+                rationale: "AI-Enabled is an optimizer; the underlying process exists without it."
+            }
+        ];
+
+        // --- STATE MANAGEMENT ---
+        let currentQuizIndex = 0;
+        let score = 0;
+        let currentPillarIndex = 0;
+
+        // --- DOM ELEMENTS ---
+        const comparisonContent = document.getElementById('comparison-content');
+        const btnEnabled = document.getElementById('btn-enabled');
+        const btnFirst = document.getElementById('btn-first');
+        const pillarContentDiv = document.getElementById('pillar-content');
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initComparison();
+            renderPillar(0); // Default first pillar
+            initCharts();
+            renderQuizQuestion();
+            
+            // Mobile Menu
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.toggle('hidden');
+            });
+        });
+
+        // --- FUNCTIONAL NAVIGATION ---
+        function navTo(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // --- SECTION 1: COMPARISON LOGIC ---
+        function initComparison() {
+            // Default to AI-First view
+            updateComparison('first');
+
+            btnEnabled.addEventListener('click', () => updateComparison('enabled'));
+            btnFirst.addEventListener('click', () => updateComparison('first'));
+        }
+
+        function updateComparison(type) {
+            const data = comparisonData[type];
+            
+            // Button Styles
+            if (type === 'enabled') {
+                btnEnabled.classList.replace('bg-stone-200', 'bg-amber-600');
+                btnEnabled.classList.replace('text-stone-600', 'text-white');
+                btnFirst.classList.replace('bg-teal-600', 'bg-stone-200');
+                btnFirst.classList.replace('text-white', 'text-stone-600');
+                btnFirst.classList.remove('shadow-md');
+                btnEnabled.classList.add('shadow-md');
+            } else {
+                btnFirst.classList.replace('bg-stone-200', 'bg-teal-600');
+                btnFirst.classList.replace('text-stone-600', 'text-white');
+                btnEnabled.classList.replace('bg-amber-600', 'bg-stone-200');
+                btnEnabled.classList.replace('text-white', 'text-stone-600');
+                btnEnabled.classList.remove('shadow-md');
+                btnFirst.classList.add('shadow-md');
+            }
+
+            // Content Injection with transition
+            comparisonContent.style.opacity = '0';
+            setTimeout(() => {
+                comparisonContent.innerHTML = `
+                    <div class="grid grid-cols-1 gap-3">
+                        <div class="p-3 rounded border ${data.color}">
+                            <div class="text-xs uppercase font-bold text-stone-500 mb-1">Role of AI</div>
+                            <div class="font-medium text-stone-800">${data.role}</div>
+                        </div>
+                        <div class="p-3 rounded border ${data.color}">
+                            <div class="text-xs uppercase font-bold text-stone-500 mb-1">Data Strategy</div>
+                            <div class="font-medium text-stone-800">${data.data}</div>
+                        </div>
+                        <div class="p-3 rounded border ${data.color}">
+                            <div class="text-xs uppercase font-bold text-stone-500 mb-1">Workflow</div>
+                            <div class="font-medium text-stone-800">${data.workflow}</div>
+                        </div>
+                        <div class="p-3 rounded border ${data.color}">
+                            <div class="text-xs uppercase font-bold text-stone-500 mb-1">Handling Mistakes</div>
+                            <div class="font-medium text-stone-800">${data.mistakes}</div>
+                        </div>
+                    </div>
+                `;
+                comparisonContent.style.opacity = '1';
+            }, 200);
+        }
+
+        // --- SECTION 2: PILLARS LOGIC ---
+        function selectPillar(index) {
+            // Update Buttons
+            for(let i=0; i<4; i++) {
+                const btn = document.getElementById(`pillar-btn-${i}`);
+                if(i === index) {
+                    btn.classList.remove('bg-white', 'border-transparent', 'hover:bg-stone-50');
+                    btn.classList.add('bg-teal-50', 'border-teal-600');
+                    btn.querySelector('div.font-bold').classList.replace('text-stone-700', 'text-teal-800');
+                } else {
+                    btn.classList.add('bg-white', 'border-transparent', 'hover:bg-stone-50');
+                    btn.classList.remove('bg-teal-50', 'border-teal-600');
+                    btn.querySelector('div.font-bold').classList.replace('text-teal-800', 'text-stone-700');
+                }
+            }
+            renderPillar(index);
+        }
+
+        function renderPillar(index) {
+            const data = pillars[index];
+            pillarContentDiv.style.opacity = '0';
+            setTimeout(() => {
+                pillarContentDiv.innerHTML = `
+                    <div class="flex items-center mb-6">
+                        <div class="text-5xl mr-4">${data.icon}</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-stone-800">${data.title}</h3>
+                            <div class="text-teal-600 font-medium">${data.subtitle}</div>
+                        </div>
+                    </div>
+                    <div class="text-lg text-stone-600 mb-6 leading-relaxed">
+                        ${data.content}
+                    </div>
+                    <div class="mt-auto pt-4 border-t border-stone-200">
+                        <span class="inline-block bg-stone-100 text-stone-600 text-xs font-bold px-3 py-1 rounded-full">
+                            ${data.kpi}
+                        </span>
+                    </div>
+                `;
+                pillarContentDiv.style.opacity = '1';
+            }, 200);
+        }
+
+        // --- CHART.JS VISUALIZATIONS ---
+        function initCharts() {
+            // 1. Radar Chart (Maturity)
+            const ctxRadar = document.getElementById('maturityRadarChart').getContext('2d');
+            
+            // Set default font for Chart.js to Courier Prime
+            Chart.defaults.font.family = "'Courier Prime', monospace";
+
+            new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: ['Dependency', 'Infrastructure', 'Decision Making', 'Talent'],
+                    datasets: [{
+                        label: 'AI-First Org',
+                        data: [100, 95, 90, 100],
+                        fill: true,
+                        backgroundColor: 'rgba(13, 148, 136, 0.2)', // Teal
+                        borderColor: 'rgb(13, 148, 136)',
+                        pointBackgroundColor: 'rgb(13, 148, 136)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(13, 148, 136)'
+                    }, {
+                        label: 'Traditional Org',
+                        data: [20, 30, 15, 25],
+                        fill: true,
+                        backgroundColor: 'rgba(217, 119, 6, 0.2)', // Amber
+                        borderColor: 'rgb(217, 119, 6)',
+                        pointBackgroundColor: 'rgb(217, 119, 6)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(217, 119, 6)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: { borderWidth: 3 }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: {
+                                font: { size: 12 },
+                                color: '#44403c'
+                            },
+                            ticks: { display: false, max: 100 }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // 2. Line Chart (Growth Simulation)
+            const ctxLine = document.getElementById('growthChart').getContext('2d');
+            
+            // Generate data points
+            const years = Array.from({length: 10}, (_, i) => i + 1);
+            const linearData = years.map(x => 10 + (x * 5)); // Linear
+            const expData = years.map(x => 10 * Math.pow(1.4, x)); // Exponential (Flywheel)
+
+            new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: years.map(y => `Year ${y}`),
+                    datasets: [{
+                        label: 'AI-First (Flywheel Effect)',
+                        data: expData,
+                        borderColor: 'rgb(13, 148, 136)', // Teal
+                        backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'AI-Enabled (Linear Optimization)',
+                        data: linearData,
+                        borderColor: 'rgba(255, 255, 255, 0.6)', // White/Transparent
+                        borderDash: [5, 5],
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#d6d3d1' } },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        x: { 
+                            ticks: { color: '#a8a29e' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: { 
+                            ticks: { color: '#a8a29e' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            title: { display: true, text: 'Business Value / Efficiency', color: '#a8a29e' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- SECTION 4: QUIZ LOGIC ---
+        function renderQuizQuestion() {
+            const q = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-q-num').innerText = currentQuizIndex + 1;
+            
+            // Update Progress Bar
+            const progress = ((currentQuizIndex) / quizQuestions.length) * 100;
+            document.getElementById('quiz-progress').style.width = `${progress}%`;
+
+            document.getElementById('quiz-question').innerText = q.q;
+            const optionsDiv = document.getElementById('quiz-options');
+            optionsDiv.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-lg border border-stone-200 hover:bg-stone-50 transition-colors text-stone-700 font-medium";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(idx, btn);
+                optionsDiv.appendChild(btn);
+            });
+
+            // Hide Feedback
+            document.getElementById('quiz-feedback').classList.add('hidden');
+        }
+
+        function checkAnswer(selectedIdx, btnElement) {
+            const q = quizQuestions[currentQuizIndex];
+            const feedbackDiv = document.getElementById('quiz-feedback');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackText = document.getElementById('feedback-text');
+            const feedbackRationale = document.getElementById('feedback-rationale');
+            const nextBtn = document.getElementById('next-btn');
+
+            // Disable all buttons
+            const allBtns = document.getElementById('quiz-options').children;
+            for(let btn of allBtns) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+
+            if (selectedIdx === q.correct) {
+                score++;
+                btnElement.classList.remove('border-stone-200', 'hover:bg-stone-50');
+                btnElement.classList.add('bg-teal-100', 'border-teal-500', 'text-teal-900');
+                feedbackIcon.innerHTML = "✅";
+                feedbackText.innerText = "Correct!";
+                feedbackText.className = "text-teal-700 font-bold";
+            } else {
+                btnElement.classList.remove('border-stone-200', 'hover:bg-stone-50');
+                btnElement.classList.add('bg-red-100', 'border-red-500', 'text-red-900');
+                feedbackIcon.innerHTML = "❌";
+                feedbackText.innerText = "Incorrect.";
+                feedbackText.className = "text-red-700 font-bold";
+                
+                // Highlight correct one
+                allBtns[q.correct].classList.remove('opacity-50');
+                allBtns[q.correct].classList.add('bg-teal-50', 'border-teal-500');
+            }
+
+            feedbackRationale.innerText = q.rationale;
+            feedbackDiv.classList.remove('hidden');
+
+            if (currentQuizIndex === quizQuestions.length - 1) {
+                nextBtn.innerText = "See Results";
+                nextBtn.onclick = showResults;
+            } else {
+                nextBtn.innerText = "Next Question →";
+                nextBtn.onclick = () => {
+                    currentQuizIndex++;
+                    renderQuizQuestion();
+                };
+            }
+        }
+
+        function showResults() {
+            document.querySelector('.bg-stone-100').classList.add('hidden'); // Hide header
+            document.querySelector('.p-8').classList.add('hidden'); // Hide question body
+            
+            const resultsDiv = document.getElementById('quiz-results');
+            resultsDiv.classList.remove('hidden');
+            
+            document.getElementById('final-score').innerText = score;
+            
+            const msg = document.getElementById('result-message');
+            if (score >= 9) {
+                msg.innerText = "Expert Level. You fully grasp the strategic shift required for AI-First.";
+            } else if (score >= 6) {
+                msg.innerText = "Solid Understanding. You know the key differences, but watch out for subtle distinctions in data strategy.";
+            } else {
+                msg.innerText = "AI-Enabled Mindset. Review the Pillars section to understand why AI-First is a structural change, not just a tool upgrade.";
+            }
+        }
+
+        function restartQuiz() {
+            currentQuizIndex = 0;
+            score = 0;
+            document.querySelector('.bg-stone-100').classList.remove('hidden');
+            document.querySelector('.p-8').classList.remove('hidden');
+            document.getElementById('quiz-results').classList.add('hidden');
+            renderQuizQuestion();
+        }
+
+    </script>
+</body>
+</html>
